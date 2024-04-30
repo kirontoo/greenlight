@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -11,15 +10,15 @@ import (
 
 func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		Title string `json:"title"`
-		Year int32 `json:"year"`
-		Runtime int32 `json:"runtime"`
-		Genres []string `json:"genres"`
+		Title   string   `json:"title"`
+		Year    int32    `json:"year"`
+		Runtime int32    `json:"runtime"`
+		Genres  []string `json:"genres"`
 	}
 
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := app.readJSON(w, r, &input)
 	if err != nil {
-		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		app.badRequestResponse(w, r, err)
 	}
 
 	fmt.Fprintf(w, "%+v\n", input)
@@ -33,11 +32,11 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	movie := data.Movie{
-		ID: id,
+		ID:        id,
 		CreatedAt: time.Now(),
-		Runtime: 102,
-		Genres: []string{"drama", "romance", "war"},
-		Version: 1,
+		Runtime:   102,
+		Genres:    []string{"drama", "romance", "war"},
+		Version:   1,
 	}
 
 	err = app.writeJSON(w, http.StatusOK, envelope{"movie": movie}, nil)
