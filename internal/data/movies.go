@@ -42,6 +42,13 @@ type MovieModel struct {
 	DB *sql.DB
 }
 
+type Movies interface {
+	Insert(movie *Movie) error
+	Get(id int64) (*Movie, error)
+	Update(movie *Movie) error
+	Delete(id int64) error
+}
+
 func (m MovieModel) Insert(movie *Movie) error {
 	return nil
 }
