@@ -8,3 +8,8 @@ ENV VARIABLES:
 
 export GREENLIGHT_DB_DSN="postgres://greenlight:password@localhost/greenlight"
 
+## Migration Commands
+```bash
+migrate -path=./migrations -database=$GREENLIGHT_DB_DSN up
+```
+
