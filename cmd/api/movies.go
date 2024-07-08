@@ -66,6 +66,11 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	movie, err := app.models.Movies.Get(id)
+	app.logger.PrintInfo("/v1/movies/:id request", map[string]string{
+		"movie": fmt.Sprintf("%+v", movie),
+		"pq-error": fmt.Sprintf("%+v",err),
+		})
+
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
