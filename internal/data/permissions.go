@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"time"
+
+	"github.com/lib/pq"
 )
 
 // "movies:read" and "movies:write") for a single user.
@@ -24,7 +26,7 @@ type PermissionModel struct {
 }
 
 // The GetAllForUser() method returns all permission codes for a specific user in a
-// Permissions slice. 
+// Permissions slice.
 func (m PermissionModel) GetAllForUser(userID int64) (Permissions, error) {
 	query := `
 SELECT permissions.code
@@ -58,4 +60,16 @@ WHERE users.id = $1`
 	}
 
 	return permissions, nil
+}
+
+func (m PermissionModel) AddForUser(userID int64, codes ...string) error {
+	query := `
+INSERT INTO users_permissions
+SELECT $1, permissions.id FROM permissions WHERE permissions.code = ANY($2)`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	_, err := m.DB.ExecContext(ctx, query, userID, pq.Array(codes))
+	return err
 }
