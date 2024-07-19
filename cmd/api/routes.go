@@ -26,6 +26,8 @@ func (app *application) routes() http.Handler {
 
 	router.HandlerFunc(http.MethodPost, "/v1/tokens/authentication", app.createAuthenticationTokenHandler)
 
+	// WARNING: this is not a protected route
+	// restrict access to this endpoint in production
 	router.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
 
 	return app.recoverPanic(app.enableCORS(app.rateLimit(app.authenticate(router))))
