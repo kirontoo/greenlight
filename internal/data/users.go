@@ -15,7 +15,6 @@ var (
 	ErrDuplicateEmail = errors.New("duplicate email")
 )
 
-
 // To represent a unactivated User
 var AnonymousUser = &User{}
 

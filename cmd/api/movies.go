@@ -67,9 +67,9 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 
 	movie, err := app.models.Movies.Get(id)
 	app.logger.PrintInfo("/v1/movies/:id request", map[string]string{
-		"movie": fmt.Sprintf("%+v", movie),
-		"pq-error": fmt.Sprintf("%+v",err),
-		})
+		"movie":    fmt.Sprintf("%+v", movie),
+		"pq-error": fmt.Sprintf("%+v", err),
+	})
 
 	if err != nil {
 		switch {
@@ -188,8 +188,8 @@ func (app *application) deleteMovieHandler(w http.ResponseWriter, r *http.Reques
 
 func (app *application) listMoviesHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		Title    string
-		Genres   []string
+		Title  string
+		Genres []string
 		data.Filters
 	}
 
@@ -222,6 +222,6 @@ func (app *application) listMoviesHandler(w http.ResponseWriter, r *http.Request
 
 	err = app.writeJSON(w, http.StatusOK, envelope{"movies": movies, "metadata": metadata}, nil)
 	if err != nil {
-			app.serverErrorResponse(w, r, err)
+		app.serverErrorResponse(w, r, err)
 	}
 }
