@@ -90,5 +90,9 @@ production/connect:
 .PHONY: production/deploy/api
 	production/deploy/api:
 	rsync -P ./bin/linux_amd64/api greenlight@${production_host_ip}:~
-	rsync -rP --delete ./migrations greenlight@${production_host_ip}:~
-	ssh -t greenlight@${production_host_ip} 'migrate -path ~/migrations -database $$GREENLIGHT_DB_DSN up'
+	ssh -t greenlight@${production_host_ip} '\
+	migrate -path ~/migrations -database $$GREENLIGHT_DB_DSN up \
+	&& sudo mv ~/api.service /etc/systemd/system/ \
+	&& sudo systemctl enable api \
+	&& sudo systemctl restart api \
+	'	rsync -rP --delete ./migrations greenlight@${production_host_ip}:~
