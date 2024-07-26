@@ -37,6 +37,19 @@ make run/api
 ```
 
 ## Deployment
+After setting up server, remember to grab IP Address of server and replace
+it in `./remote/production/Caddyfile` and in `Makefile`
+
+```
+// ./remote/production/Caddyfile
+http://161.35.71.158
+
+// File: ./Makefile
+production_host_ip = '161.35.71.158'
+```
+
+
+
 ```bash
 make production/deploy/api
 ```
